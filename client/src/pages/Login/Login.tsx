@@ -1,7 +1,12 @@
 /** @jsxImportSource @emotion/react */
 
 import { useState } from "react";
-import { Button, SignUpButton, TextButton } from "../../components";
+import {
+  AppTitle,
+  Button,
+  SecondaryButton,
+  TextButton,
+} from "../../components";
 import { Form, Input } from "../../components/form";
 import { Footer } from "./components";
 
@@ -13,57 +18,69 @@ const Login: React.FC = () => {
     <div
       css={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      <h1
+      <div
         css={{
-          fontSize: "24px",
-          fontWeight: "bold",
-          margin: "64px 0px 32px 0px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          "@media only screen and (min-width: 480px)": {
+            height: "100vh",
+            justifyContent: "center",
+            paddingBottom: "5.626rem",
+          },
         }}
       >
-        User Auth <span css={{ color: "#82817F" }}>4000</span>
-      </h1>
-
-      <Form
-        css={{
-          padding: "0px 1rem",
-          marginBottom: "2rem",
-        }}
-        onSubmit={(e) => {
-          e.preventDefault();
-
-          console.log("submit");
-        }}
-      >
-        <Input
-          css={{ marginBottom: "16px" }}
-          placeholder="Email address"
-          value={emailAddress ? emailAddress : ""}
-          onChange={(e) => {
-            setEmailAddress(e.target.value);
+        <AppTitle
+          css={{
+            margin: "64px 0px 32px 0px",
           }}
         />
 
-        <Input
-          css={{ marginBottom: "24px" }}
-          placeholder="Password"
-          value={password ? password : ""}
-          onChange={(e) => {
-            setPassword(e.target.value);
+        <Form
+          css={{
+            padding: "0px 1rem",
+            marginBottom: "2rem",
+            "@media only screen and (min-width: 480px)": {
+              maxWidth: "400px",
+            },
           }}
-        />
+          onSubmit={(e) => {
+            e.preventDefault();
 
-        <Button type="submit">Log in</Button>
-      </Form>
+            console.log("submit");
+          }}
+        >
+          <Input
+            css={{ marginBottom: "16px" }}
+            placeholder="Email address"
+            value={emailAddress ? emailAddress : ""}
+            onChange={(e) => {
+              setEmailAddress(e.target.value);
+            }}
+          />
 
-      <TextButton onClick={() => console.log("forgot your password?")}>
-        Forgot your password?
-      </TextButton>
+          <Input
+            css={{ marginBottom: "24px" }}
+            placeholder="Password"
+            value={password ? password : ""}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+
+          <Button type="submit">Log in</Button>
+        </Form>
+
+        <TextButton onClick={() => console.log("forgot your password?")}>
+          Forgot your password?
+        </TextButton>
+      </div>
 
       <Footer>
-        <p>Don't have an account?</p>
-        <SignUpButton onClick={() => console.log("sign up")}>
+        <p css={{ marginRight: "1.25rem" }}>Don't have an account?</p>
+        <SecondaryButton onClick={() => console.log("sign up")}>
           Sign up
-        </SignUpButton>
+        </SecondaryButton>
       </Footer>
     </div>
   );

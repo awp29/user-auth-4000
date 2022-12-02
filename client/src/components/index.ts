@@ -1,5 +1,6 @@
+import AppTitle from "./AppTitle";
 import Button from "./Button";
 import TextButton from "./TextButton";
-import SignUpButton from "./SignUpButton";
+import SecondaryButton from "./SecondaryButton";
 
-export { Button, TextButton, SignUpButton };
+export { AppTitle, Button, TextButton, SecondaryButton };

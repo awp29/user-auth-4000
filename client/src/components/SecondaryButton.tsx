@@ -5,7 +5,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const SignUpButton: React.FC<Props> = (props) => {
+const SecondaryButton: React.FC<Props> = (props) => {
   const { onClick, children } = props;
 
   return (
@@ -28,4 +28,4 @@ const SignUpButton: React.FC<Props> = (props) => {
   );
 };
 
-export default SignUpButton;
+export default SecondaryButton;

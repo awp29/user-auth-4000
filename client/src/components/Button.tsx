@@ -15,6 +15,7 @@ const Button: React.FC<Props> = (props) => {
         backgroundColor: "#161616",
         borderRadius: "0.5rem",
         border: "none",
+        height: "44px",
         width: "100%",
         color: "white",
         fontSize: "1rem",
