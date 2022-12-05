@@ -1,0 +1,55 @@
+import React, { useEffect, useState } from "react";
+import { login as loginRequest } from "./requests/login";
+import { User } from "./types";
+
+interface AuthContextValue {
+  user: User | null;
+  login: (email: string, password: string) => Promise<void>;
+}
+
+const AuthContext = React.createContext<AuthContextValue | undefined>(
+  undefined
+);
+
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
+const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const user = window.localStorage.getItem("user");
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    const data = await loginRequest(email, password);
+    if (data) {
+      console.log("data.user", data.user);
+      setUser(data.user);
+      window.localStorage.setItem("JWT", data.token);
+      window.localStorage.setItem("user", JSON.stringify(data.user));
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login: login }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+const useAuth = () => {
+  const context = React.useContext(AuthContext);
+
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+
+  return context;
+};
+
+export { AuthProvider, useAuth };

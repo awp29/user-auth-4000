@@ -14,6 +14,10 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/user", createNewUser);
 app.post("/signin", signin);
 
+app.get("/user", protect, (req, res) => {
+  res.json({ message: "YAYYYYYY" });
+});
+
 app.use((err, req, res, next) => {
   switch (err.type) {
     case "auth":

@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthContext";
 import {
   AppTitle,
   Button,
@@ -13,6 +15,8 @@ import { Footer } from "./components";
 const Login: React.FC = () => {
   const [emailAddress, setEmailAddress] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   return (
     <div
@@ -44,10 +48,19 @@ const Login: React.FC = () => {
               maxWidth: "400px",
             },
           }}
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
 
-            console.log("submit");
+            if (!emailAddress || !password) {
+              return;
+            }
+
+            try {
+              await login(emailAddress, password);
+              navigate("/home");
+            } catch (error) {
+              throw new Error("Error: failed to login");
+            }
           }}
         >
           <Input
@@ -78,7 +91,7 @@ const Login: React.FC = () => {
 
       <Footer>
         <p css={{ marginRight: "1.25rem" }}>Don't have an account?</p>
-        <SecondaryButton onClick={() => console.log("sign up")}>
+        <SecondaryButton onClick={async () => console.log("sign up")}>
           Sign up
         </SecondaryButton>
       </Footer>
