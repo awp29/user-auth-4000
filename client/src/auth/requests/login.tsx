@@ -7,14 +7,13 @@ type LoginResponse = {
 };
 
 export const login = async (email: string, password: string) => {
+  console.log("BASE URL", axios.defaults.baseURL);
+
   try {
-    const response = await axios.post<LoginResponse>(
-      "http://localhost:3001/signin",
-      {
-        email,
-        password,
-      }
-    );
+    const response = await axios.post<LoginResponse>("/signin", {
+      email,
+      password,
+    });
 
     return response.data;
   } catch (error) {

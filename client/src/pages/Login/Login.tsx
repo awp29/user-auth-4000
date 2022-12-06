@@ -18,8 +18,6 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  console.log("API URL", process.env.REACT_APP_API_URL);
-
   return (
     <div
       css={{ display: "flex", flexDirection: "column", alignItems: "center" }}

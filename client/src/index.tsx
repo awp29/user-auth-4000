@@ -8,6 +8,9 @@ import { Login } from "./pages";
 import { AuthProvider } from "./auth/AuthContext";
 import Home from "./pages/Home";
 import { SignUp } from "./pages/SignUp";
+import axios from "axios";
+
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const router = createBrowserRouter([
   {
