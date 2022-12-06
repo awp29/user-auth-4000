@@ -8,12 +8,7 @@ type SignupResponse = {
 
 export const signup = async (userDetails: UserSignupDetails) => {
   try {
-    const response = await axios.post<SignupResponse>(
-      "http://localhost:3001/signup",
-      userDetails
-    );
-
-    console.log("signup response", response);
+    const response = await axios.post<SignupResponse>("/signup", userDetails);
     return response.data;
   } catch (error) {
     console.error("ERROR", error);
