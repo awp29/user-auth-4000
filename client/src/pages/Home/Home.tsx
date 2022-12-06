@@ -2,6 +2,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
+import { AppTitle, Nav, SecondaryButton } from "../../components";
 
 const Home: React.FC = () => {
   const { user, logout } = useAuth();
@@ -9,19 +10,34 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <h1>HOME!!!!!!</h1>
+      <Nav>
+        <AppTitle />
 
-      <p>MOTHER FLIPPING USER</p>
-      {user && <pre>{JSON.stringify(user, null, 2)}</pre>}
+        <SecondaryButton
+          onClick={() => {
+            logout();
+            navigate("/login");
+          }}
+        >
+          Log Out
+        </SecondaryButton>
+      </Nav>
 
-      <button
-        onClick={() => {
-          logout();
-          navigate("/login");
+      <div
+        css={{
+          padding: "0 1rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        Log Out
-      </button>
+        <div>
+          <h1 css={{ fontWeight: "bold", marginBottom: "2rem" }}>
+            Current User
+          </h1>
+          {user && <pre>{JSON.stringify(user, null, 2)}</pre>}
+        </div>
+      </div>
     </div>
   );
 };

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
-import { AppTitle, Button, SecondaryButton } from "../../components";
+import { AppTitle, Button, Nav, SecondaryButton } from "../../components";
 import { Form, Input, Label } from "../../components/form";
 
 const SignUp: React.FC = () => {
@@ -16,19 +16,10 @@ const SignUp: React.FC = () => {
 
   return (
     <div>
-      <div
-        css={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "1.5rem 1rem",
-          maxWidth: "1280px",
-          margin: "0 auto 4rem auto",
-        }}
-      >
+      <Nav>
         <AppTitle />
-
         <SecondaryButton onClick={() => navigate("/")}>Log in</SecondaryButton>
-      </div>
+      </Nav>
 
       <div css={{ padding: "0 1rem", maxWidth: "720px", margin: "auto" }}>
         <h1 css={{ fontWeight: "bold", marginBottom: "2rem" }}>Sign up</h1>
