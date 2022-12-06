@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { login as loginRequest } from "./requests/login";
-import { User } from "./types";
+import { signup as signupRequest } from "./requests/signup";
+import { User, UserSignupDetails } from "./types";
 
 interface AuthContextValue {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  signup: (userSignupDetails: UserSignupDetails) => Promise<void>;
 }
 
 const AuthContext = React.createContext<AuthContextValue | undefined>(
@@ -35,8 +38,25 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const logout = () => {
+    window.localStorage.removeItem("JWT");
+    window.localStorage.removeItem("user");
+
+    setUser(null);
+  };
+
+  const signup = async (userSignupDetails: UserSignupDetails) => {
+    const data = await signupRequest(userSignupDetails);
+    if (data) {
+      console.log("data.user", data.user);
+      setUser(data.user);
+      window.localStorage.setItem("JWT", data.token);
+      window.localStorage.setItem("user", JSON.stringify(data.user));
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login: login }}>
+    <AuthContext.Provider value={{ user, login, logout, signup }}>
       {children}
     </AuthContext.Provider>
   );

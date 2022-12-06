@@ -1,9 +1,19 @@
 /** @jsxImportSource @emotion/react */
 
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthContext";
 import { AppTitle, Button, SecondaryButton } from "../../components";
 import { Form, Input, Label } from "../../components/form";
 
 const SignUp: React.FC = () => {
+  const [firstName, setFirstName] = useState<string | null>(null);
+  const [lastName, setLastName] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const [password, setPassword] = useState<string | null>(null);
+  const { signup } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <div>
       <div
@@ -11,24 +21,32 @@ const SignUp: React.FC = () => {
           display: "flex",
           justifyContent: "space-between",
           padding: "1.5rem 1rem",
-          marginBottom: "4rem",
+          maxWidth: "1280px",
+          margin: "0 auto 4rem auto",
         }}
       >
         <AppTitle />
 
-        <SecondaryButton onClick={() => console.log("log in")}>
-          Log in
-        </SecondaryButton>
+        <SecondaryButton onClick={() => navigate("/")}>Log in</SecondaryButton>
       </div>
 
-      <div css={{ padding: "0 1rem" }}>
+      <div css={{ padding: "0 1rem", maxWidth: "720px", margin: "auto" }}>
         <h1 css={{ fontWeight: "bold", marginBottom: "2rem" }}>Sign up</h1>
 
         <Form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
 
-            console.log("submit");
+            if (!firstName || !lastName || !email || !password) {
+              return;
+            }
+
+            try {
+              await signup({ firstName, lastName, email, password });
+              navigate("/");
+            } catch (error) {
+              throw new Error("Error: failed to singup");
+            }
           }}
         >
           <div
@@ -36,30 +54,44 @@ const SignUp: React.FC = () => {
           >
             <div css={{ marginRight: "12px", flex: 1 }}>
               <Label>First name*</Label>
-              <Input value="" onChange={() => console.log("change")} />
+              <Input
+                value={firstName ? firstName : ""}
+                onChange={(e) => {
+                  setFirstName(e.target.value);
+                }}
+              />
             </div>
 
             <div css={{ marginLeft: "12px", flex: 1 }}>
               <Label>Last name*</Label>
-              <Input value="" onChange={() => console.log("change")} />
+              <Input
+                value={lastName ? lastName : ""}
+                onChange={(e) => {
+                  setLastName(e.target.value);
+                }}
+              />
             </div>
           </div>
 
           <div css={{ marginBottom: "1.25rem" }}>
             <Label>Email*</Label>
             <Input
-              value=""
+              value={email ? email : ""}
               placeholder="Email address"
-              onChange={() => console.log("change")}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
             />
           </div>
 
           <div css={{ marginBottom: "1.75rem" }}>
             <Label>Password*</Label>
             <Input
-              value=""
+              value={password ? password : ""}
               placeholder="Password"
-              onChange={() => console.log("change")}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
           </div>
 

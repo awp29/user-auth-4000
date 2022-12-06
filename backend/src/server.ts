@@ -2,7 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import { protect } from "./modules/auth";
-import { createNewUser, signin } from "./handlers/user";
+import { singup, signin } from "./handlers/user";
 
 const app = express();
 
@@ -11,7 +11,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/user", createNewUser);
+app.post("/signup", singup);
 app.post("/signin", signin);
 
 app.get("/user", protect, (req, res) => {

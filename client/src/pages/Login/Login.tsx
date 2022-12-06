@@ -57,7 +57,7 @@ const Login: React.FC = () => {
 
             try {
               await login(emailAddress, password);
-              navigate("/home");
+              navigate("/");
             } catch (error) {
               throw new Error("Error: failed to login");
             }
@@ -91,7 +91,7 @@ const Login: React.FC = () => {
 
       <Footer>
         <p css={{ marginRight: "1.25rem" }}>Don't have an account?</p>
-        <SecondaryButton onClick={async () => console.log("sign up")}>
+        <SecondaryButton onClick={async () => navigate("/signup")}>
           Sign up
         </SecondaryButton>
       </Footer>

@@ -10,7 +10,7 @@ const ProtectedRoute: React.FC<Props> = (props) => {
   const token = getToken();
 
   if (!token) {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
   }
   return <>{children}</>;
 };

@@ -7,14 +7,19 @@ import ProtectedRoute from "./ProtectedRoute";
 import { Login } from "./pages";
 import { AuthProvider } from "./auth/AuthContext";
 import Home from "./pages/Home";
+import { SignUp } from "./pages/SignUp";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <Login />,
   },
   {
-    path: "/home",
+    path: "/signup",
+    element: <SignUp />,
+  },
+  {
+    path: "/",
     element: (
       <ProtectedRoute>
         <Home />
