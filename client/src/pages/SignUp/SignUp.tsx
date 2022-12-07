@@ -4,7 +4,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import { AppTitle, Button, Nav, SecondaryButton } from "../../components";
-import { Form, Input, Label } from "../../components/form";
+import { Error, Form, Input, Label } from "../../components/form";
+import { useInputField } from "../../components/form/useInputField";
+import {
+  allValid,
+  isEmail,
+  isPassword,
+  isString,
+} from "../../components/form/validators";
 
 const SignUp: React.FC = () => {
   const [firstName, setFirstName] = useState<string | null>(null);
@@ -13,6 +20,18 @@ const SignUp: React.FC = () => {
   const [password, setPassword] = useState<string | null>(null);
   const { signup } = useAuth();
   const navigate = useNavigate();
+
+  const firstNameInput = useInputField(isString);
+  const lastNameInput = useInputField(isString);
+  const emailInput = useInputField(isEmail);
+  const passwordInput = useInputField(isPassword);
+
+  const formValid = allValid([
+    firstNameInput.valid,
+    lastNameInput.valid,
+    emailInput.valid,
+    passwordInput.valid,
+  ]);
 
   return (
     <div>
@@ -28,15 +47,18 @@ const SignUp: React.FC = () => {
           onSubmit={async (e) => {
             e.preventDefault();
 
-            if (!firstName || !lastName || !email || !password) {
-              return;
-            }
-
-            try {
-              await signup({ firstName, lastName, email, password });
-              navigate("/");
-            } catch (error) {
-              throw new Error("Error: failed to singup");
+            if (formValid) {
+              try {
+                await signup({
+                  firstName: firstNameInput.value,
+                  lastName: lastNameInput.value,
+                  email: emailInput.value,
+                  password: passwordInput.value,
+                });
+                navigate("/");
+              } catch (error) {
+                console.error(error);
+              }
             }
           }}
         >
@@ -46,47 +68,62 @@ const SignUp: React.FC = () => {
             <div css={{ marginRight: "12px", flex: 1 }}>
               <Label>First name*</Label>
               <Input
-                value={firstName ? firstName : ""}
-                onChange={(e) => {
-                  setFirstName(e.target.value);
-                }}
+                value={firstNameInput.value}
+                error={firstNameInput.hasError}
+                onChange={firstNameInput.onChange}
+                onBlur={firstNameInput.onBlur}
               />
+              {firstNameInput.hasError && (
+                <Error>First name cannot be empty</Error>
+              )}
             </div>
 
             <div css={{ marginLeft: "12px", flex: 1 }}>
               <Label>Last name*</Label>
               <Input
-                value={lastName ? lastName : ""}
-                onChange={(e) => {
-                  setLastName(e.target.value);
-                }}
+                value={lastNameInput.value}
+                error={lastNameInput.hasError}
+                onChange={lastNameInput.onChange}
+                onBlur={lastNameInput.onBlur}
               />
+              {lastNameInput.hasError && (
+                <Error>Last name cannot be empty</Error>
+              )}
             </div>
           </div>
 
           <div css={{ marginBottom: "1.25rem" }}>
             <Label>Email*</Label>
             <Input
-              value={email ? email : ""}
-              placeholder="Email address"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
+              value={emailInput.value}
+              error={emailInput.hasError}
+              onChange={emailInput.onChange}
+              onBlur={emailInput.onBlur}
             />
+            {emailInput.hasError && <Error>Invalid email address</Error>}
           </div>
 
           <div css={{ marginBottom: "1.75rem" }}>
             <Label>Password*</Label>
             <Input
-              value={password ? password : ""}
-              placeholder="Password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              value={passwordInput.value}
+              type="password"
+              error={passwordInput.hasError}
+              onChange={passwordInput.onChange}
+              onBlur={passwordInput.onBlur}
             />
+            {passwordInput.hasError && (
+              <Error>
+                Password must have a miniumum of 8 characters, 1 uppercase
+                character, 1 lowercase character, 1 number and 1 specical
+                character
+              </Error>
+            )}
           </div>
 
-          <Button type="submit">Create account</Button>
+          <Button type="submit" disabled={!formValid}>
+            Create account
+          </Button>
         </Form>
       </div>
     </div>

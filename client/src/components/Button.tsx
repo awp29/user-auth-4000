@@ -1,17 +1,18 @@
 /** @jsxImportSource @emotion/react */
 
 interface Props {
+  disabled?: boolean;
   type?: "button" | "submit" | "reset" | undefined;
   children: React.ReactNode;
 }
 
 const Button: React.FC<Props> = (props) => {
-  const { type = "button", children } = props;
+  const { disabled, type = "button", children } = props;
 
   return (
     <button
       css={{
-        cursor: "pointer",
+        cursor: !disabled ? "pointer" : "inherit",
         backgroundColor: "#161616",
         borderRadius: "0.5rem",
         border: "none",
@@ -21,11 +22,13 @@ const Button: React.FC<Props> = (props) => {
         fontSize: "1rem",
         fontWeight: "bold",
         padding: "0.75rem 1.5rem",
+        opacity: !disabled ? 1 : 0.3,
         "&:hover": {
-          backgroundColor: "#2e2e2e",
+          backgroundColor: !disabled ? "#2e2e2e" : "#161616",
         },
       }}
       type={type}
+      disabled={disabled}
     >
       {children}
     </button>
