@@ -8,16 +8,13 @@ import { Error, Form, Input, Label } from "../../components/form";
 import { useInputField } from "../../components/form/useInputField";
 import {
   allValid,
+  invalidPasswordErrorMessage,
   isEmail,
   isPassword,
   isString,
 } from "../../components/form/validators";
 
 const SignUp: React.FC = () => {
-  const [firstName, setFirstName] = useState<string | null>(null);
-  const [lastName, setLastName] = useState<string | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
   const { signup } = useAuth();
   const navigate = useNavigate();
 
@@ -113,11 +110,7 @@ const SignUp: React.FC = () => {
               onBlur={passwordInput.onBlur}
             />
             {passwordInput.hasError && (
-              <Error>
-                Password must have a miniumum of 8 characters, 1 uppercase
-                character, 1 lowercase character, 1 number and 1 specical
-                character
-              </Error>
+              <Error>{invalidPasswordErrorMessage}</Error>
             )}
           </div>
 

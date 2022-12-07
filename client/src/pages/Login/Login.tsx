@@ -9,14 +9,24 @@ import {
   SecondaryButton,
   TextButton,
 } from "../../components";
-import { Form, Input } from "../../components/form";
+import { Error, Form, Input } from "../../components/form";
+import { useInputField } from "../../components/form/useInputField";
+import {
+  allValid,
+  invalidPasswordErrorMessage,
+  isEmail,
+  isPassword,
+} from "../../components/form/validators";
 import { Footer } from "./components";
 
 const Login: React.FC = () => {
-  const [emailAddress, setEmailAddress] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  const emailInput = useInputField(isEmail);
+  const passwordInput = useInputField(isPassword);
+
+  const formValid = allValid([emailInput.valid, passwordInput.valid]);
 
   return (
     <div
@@ -27,6 +37,7 @@ const Login: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          width: "100%",
           "@media only screen and (min-width: 480px)": {
             height: "100vh",
             justifyContent: "center",
@@ -44,44 +55,49 @@ const Login: React.FC = () => {
           css={{
             padding: "0px 1rem",
             marginBottom: "2rem",
-            "@media only screen and (min-width: 480px)": {
-              maxWidth: "400px",
-            },
+            maxWidth: "400px",
           }}
           onSubmit={async (e) => {
             e.preventDefault();
 
-            if (!emailAddress || !password) {
-              return;
-            }
-
-            try {
-              await login(emailAddress, password);
-              navigate("/");
-            } catch (error) {
-              throw new Error("Error: failed to login");
+            if (formValid) {
+              try {
+                await login(emailInput.value, passwordInput.value);
+                navigate("/");
+              } catch (error) {
+                console.error(error);
+              }
             }
           }}
         >
-          <Input
-            css={{ marginBottom: "16px" }}
-            placeholder="Email address"
-            value={emailAddress ? emailAddress : ""}
-            onChange={(e) => {
-              setEmailAddress(e.target.value);
-            }}
-          />
+          <div css={{ marginBottom: "1rem" }}>
+            <Input
+              value={emailInput.value}
+              placeholder="Email address"
+              error={emailInput.hasError}
+              onChange={emailInput.onChange}
+              onBlur={emailInput.onBlur}
+            />
+            {emailInput.hasError && <Error>Invalid email address</Error>}
+          </div>
 
-          <Input
-            css={{ marginBottom: "24px" }}
-            placeholder="Password"
-            value={password ? password : ""}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
+          <div css={{ marginBottom: "1.5rem" }}>
+            <Input
+              value={passwordInput.value}
+              type="password"
+              placeholder="Password"
+              error={passwordInput.hasError}
+              onChange={passwordInput.onChange}
+              onBlur={passwordInput.onBlur}
+            />
+            {passwordInput.hasError && (
+              <Error>{invalidPasswordErrorMessage}</Error>
+            )}
+          </div>
 
-          <Button type="submit">Log in</Button>
+          <Button type="submit" disabled={!formValid}>
+            Log in
+          </Button>
         </Form>
 
         <TextButton onClick={() => console.log("forgot your password?")}>

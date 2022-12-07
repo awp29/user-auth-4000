@@ -1,5 +1,8 @@
 export type InputValidator = (input: string) => boolean;
 
+export const invalidPasswordErrorMessage =
+  "Password must have a miniumum of 8 characters, 1 uppercase character, 1 lowercase character, 1 number and 1 specical character";
+
 const rPassword =
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^A-Za-z0-9]).{8,}$/;
 
