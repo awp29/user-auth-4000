@@ -1,7 +1,15 @@
 import prisma from "../db";
 import { comparePasswords, createJWT, hashPassword } from "../modules/auth";
+import { validationResult } from "express-validator";
+import { hasErrors, sendErrors } from "../modules/validation";
 
 export const signup = async (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (hasErrors(errors)) {
+    sendErrors(res, errors);
+  }
+
   try {
     const { body } = req;
 
@@ -30,6 +38,12 @@ export const signup = async (req, res, next) => {
 };
 
 export const signin = async (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (hasErrors(errors)) {
+    sendErrors(res, errors);
+  }
+
   try {
     const user = await prisma.user.findUnique({
       where: {

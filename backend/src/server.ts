@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import { protect } from "./modules/auth";
 import { signup, signin } from "./handlers/user";
+import { signinValidator, signupValidator } from "./modules/validation";
 
 const app = express();
 
@@ -15,8 +16,8 @@ app.get("/protected", protect, (req, res) => {
   res.send({ message: "Son of a bitch! You're IN!" });
 });
 
-app.post("/signup", signup);
-app.post("/signin", signin);
+app.post("/signup", signupValidator, signup);
+app.post("/signin", signinValidator, signin);
 
 app.get("/user", protect, (req, res) => {
   res.json({ message: "YAYYYYYY" });
